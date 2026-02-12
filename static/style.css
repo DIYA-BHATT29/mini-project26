@@ -1,7 +1,6 @@
-/* ====== GLOBAL ====== */
 body {
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #4e73df, #1cc88a);
+  background: linear-gradient(135deg,#4e73df,#1cc88a);
   margin: 0;
   padding: 0;
   display: flex;
@@ -10,144 +9,75 @@ body {
   height: 100vh;
 }
 
-/* ====== CHAT CONTAINER (GLASS EFFECT) ====== */
 .chat-container {
-  width: 420px;
-  height: 650px;
-  display: flex;
-  flex-direction: column;
   border-radius: 20px;
-  backdrop-filter: blur(15px);
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
+  box-shadow: 0 10px 30px 
+  rgba(0,0,0,0.2);
 }
 
-/* ====== HEADER ====== */
 .chat-header {
-  background: rgba(46, 89, 217, 0.8);
+  background: #2e59d9;
   color: white;
   padding: 18px;
-  font-size: 20px;
-  font-weight: 600;
+  font-size:20px;
+  font-weight:600;
   letter-spacing: 1px;
-  text-align: center;
-  backdrop-filter: blur(10px);
 }
 
-/* ====== BODY ====== */
 .chat-body {
   flex: 1;
   padding: 16px;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
 
-/* Scrollbar Styling */
-.chat-body::-webkit-scrollbar {
-  width: 6px;
-}
-
-.chat-body::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 10px;
-}
-
-/* ====== MESSAGE STYLING ====== */
 .message {
-  max-width: 75%;
-  padding: 12px 16px;
-  border-radius: 18px;
-  font-size: 14px;
-  line-height: 1.4;
   animation: fadeIn 0.3s ease-in-out;
-  word-wrap: break-word;
 }
 
-/* User Message */
-.user {
-  background: linear-gradient(135deg, #4e73df, #2e59d9);
-  color: white;
-  align-self: flex-end;
-  border-bottom-right-radius: 5px;
-}
-
-/* Bot Message */
-.bot {
-  background: rgba(255, 255, 255, 0.85);
-  color: #333;
-  align-self: flex-start;
-  border-bottom-left-radius: 5px;
-}
-
-/* ====== FADE ANIMATION ====== */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(5px); }
-  to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* ====== FOOTER ====== */
+
+.user {
+  background: #4e73df;
+  color:white;
+  align-self: flex-end;
+}
+
+.bot {
+  background: #f1f1f1;
+  color:#333;
+  align-self: flex-start;
+}
+
 .chat-footer {
   display: flex;
-  padding: 12px;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
+  border-top: 1px solid #ddd;
 }
 
-/* Input Field */
-.chat-footer input {
-  flex: 1;
-  border: none;
-  outline: none;
-  border-radius: 25px;
-  padding: 12px 18px;
-  font-size: 14px;
-  background: rgba(255, 255, 255, 0.8);
+  .chat-footer input {
+    border-radius: 25px;
+    padding: 12px 20px;
 }
 
-/* Send Button */
 button {
-  background: #1cc88a;
-  border: none;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: 0.3s;
-  font-weight: 500;
+    background: #1cc88a;
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 button:hover {
-  background: #17a673;
-  transform: scale(1.05);
+background: #17a673;
 }
-
-/* Stop Button */
-.stop-button {
-  margin: 5px auto;
-  font-size: 12px;
-  padding: 6px 12px;
-  border-radius: 15px;
-}
-
-/* ====== THINKING TEXT ====== */
-#thinking-text {
-  text-align: center;
-  font-size: 13px;
-  color: white;
-  padding: 5px;
-  display: none;
-}
-
-/* ====== RESPONSIVE ====== */
 @media (max-width: 768px) {
-  .chat-container {
-    width: 95%;
-    height: 90vh;
-  }
+    .chat-container {
+        width: 95%;
+        height: 90vh;
+    }
 }
-
