@@ -11,18 +11,28 @@ def get_financial_response(user_message):
     }
 
     data = {
-        "model": "mistralai/mistral-7b-instruct",
-        "messages": [
-            {
-                "role": "system",
-                "content": "You are a smart financial advisor chatbot. Only answer questions related to money, finance, investments, savings, budgeting, taxes, and financial planning. If question is unrelated, politely refuse."
-            },
-            {
-                "role": "user",
-                "content": user_message
-            }
-        ]
-    }
+    "model": "openai/gpt-3.5-turbo",
+    "max_tokens": 300,
+    "temperature": 0.7,
+    "messages": [
+        {
+            "role": "system",
+            "content": """
+You are a smart financial advisor chatbot.
+
+Rules:
+- Only answer finance-related questions.
+- Refuse unrelated questions.
+- Keep answers short and beginner-friendly (6-8 lines max).
+"""
+        },
+        {
+            "role": "user",
+            "content": user_message
+        }
+    ]
+}
+
 
     response = requests.post(url, headers=headers, json=data)
 
@@ -31,4 +41,5 @@ def get_financial_response(user_message):
     else:
         print("Error:", response.text)
         return "⚠ Financial advisor service is currently unavailable."
+
 
