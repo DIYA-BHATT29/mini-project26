@@ -1,43 +1,96 @@
-const chatBody = document.getElementById("chat-body");
+// Get elements
+const sendBtn = document.getElementById('send-btn');
+const userInputField = document.getElementById('user-input');
+const chatBox = document.getElementById('chat-box');
+const thinkingText = document.getElementById('thinking-text');
 
-function addMessage(text, sender) {
-  const msg = document.createElement("div");
-  msg.classList.add("message", sender);
-  msg.textContent = text;
-  chatBody.appendChild(msg);
-  chatBody.scrollTop = chatBody.scrollHeight;
-}
+// Send button click
+sendBtn.addEventListener('click', sendMessage);
+
+// Enter key support
+userInputField.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
 
 function sendMessage() {
-  const input = document.getElementById("user-input");
-  const userText = input.value.trim();
-  if (!userText) return;
-  addMessage(userText, "user");
-  input.value = "";
+    const userInput = userInputField.value.trim();
+    if (userInput === "") return;
 
-  // Beginner-friendly financial dictionary
-  const financeTerms = {
-    "stock": "A stock is a share of ownership in a company. If you own a stock, you own a piece of that company.",
-    "bond": "A bond is like a loan you give to a company or government. They promise to pay you back with interest.",
-    "mutual fund": "A mutual fund pools money from many people to invest in stocks and bonds. It’s managed by professionals.",
-    "inflation": "Inflation means prices of goods and services go up over time, reducing the value of money.",
-    "budget": "A budget is a plan for how you will spend and save your money.",
-    "sip": "SIP (Systematic Investment Plan) is a way to invest small amounts regularly in mutual funds, helping you build wealth over time.",
-    "share market": "The share market is where people buy and sell shares (stocks) of companies. It’s also called the stock market."
-  };
+    addMessageToChatBox('user', userInput);
+    userInputField.value = '';
 
-  let response = "I'm not sure about that term yet, but I can help explain basic finance concepts.";
-  for (let term in financeTerms) {
-    if (userText.toLowerCase().includes(term)) {
-      response = financeTerms[term];
-      break;
-    }
-  }
+    // Disable button while waiting
+    sendBtn.disabled = true;
+    thinkingText.style.display = 'block';
 
-  setTimeout(() => addMessage(response, "bot"), 600);
+    fetch('/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: userInput })
+    })
+    .then(response => response.json())
+    .then(data => {
+        thinkingText.style.display = 'none';
+        sendBtn.disabled = false;
+
+        if (data.reply) {
+            typeMessage('bot', data.reply);
+        } else {
+            addMessageToChatBox('bot', '⚠️ No response received.');
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        thinkingText.style.display = 'none';
+        sendBtn.disabled = false;
+        addMessageToChatBox('bot', '❌ Sorry, something went wrong. Please try again.');
+    });
 }
 
-// Default greeting when page loads
-window.onload = () => {
-  addMessage("Hi! I’m your financial chatbot. Ask me about terms like SIP, stock, bond, inflation, or share market, and I’ll explain them simply.", "bot");
-};
+// Safely add message (no innerHTML)
+function addMessageToChatBox(sender, message) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message', sender);
+    messageElement.textContent = message;
+    chatBox.appendChild(messageElement);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Typing animation
+function typeMessage(sender, message) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message', sender);
+    chatBox.appendChild(messageElement);
+
+    let index = 0;
+    const typingSpeed = 15;
+    let isTyping = true;
+
+    // Stop button
+    const stopButton = document.createElement('button');
+    stopButton.textContent = 'Stop';
+    stopButton.classList.add('stop-button');
+    stopButton.onclick = function () {
+        isTyping = false;
+        stopButton.remove();
+    };
+
+    chatBox.appendChild(stopButton);
+
+    function type() {
+        if (index < message.length && isTyping) {
+            messageElement.textContent += message.charAt(index);
+            index++;
+            chatBox.scrollTop = chatBox.scrollHeight;
+            setTimeout(type, typingSpeed);
+        } else {
+            stopButton.remove();
+        }
+    }
+
+    type();
+}
